@@ -24,6 +24,7 @@ btnAdd.onclick = function() {
         var btnDelete = document.createElement("button");
         btnDelete.type = "button";
         btnDelete.innerHTML = 'Eliminar';
+        
         btnDelete.onclick = function() {
             tr.remove();
         }
