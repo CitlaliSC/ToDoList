@@ -3,7 +3,7 @@
     font-family: "Poppins", sans-serif;
 }
 
-.main {
+main {
     display: flex;
     flex-direction: column;
     text-align: center;
@@ -31,6 +31,7 @@ button {
     border-radius: 5px;
     border-style: none;
     color: white;
+    cursor: pointer;
 }
 
 .add-section button {
@@ -39,6 +40,7 @@ button {
 
 .list-section button {
     background-color: #aa1111;
+    margin: 5px;
 }
 
 .list-section {
@@ -69,9 +71,9 @@ th:nth-child(1) {
 }
 
 th:nth-child(2) {
-    width: 60%;
+    width: 70%;
 }
 
 th:nth-child(3) {
-    width: 30%;
+    width: 20%;
 }
