@@ -1,3 +1,5 @@
+// lista de
+
 const tasksArray = localStorage.getItem("tasks") ? JSON.parse(localStorage.getItem("tasks")) : [];
 
 console.log(tasksArray);
