@@ -8,29 +8,34 @@
     </head>
     <body>
         <main>
-            <h1>To Do List</h1>
-            <div class="add-section">
-                <input type="text" id="inpTask" placeholder="Ingrese tarea"/>
-                <button type="button" id="btnAdd" class="btn">
-                    Agregar
-                </button>
-            </div>
-    
-            <div class="list-section">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Tarea</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody id="list">
-                    </tbody>
-                </table>
+            <div class="form-section" id="login-section">
+                <h2>Login</h2>
+                <input type="email" placeholder="Correo electrónico" id="loginEmail" required>
+                <input type="password" placeholder="Contraseña" id="loginPassword" required>
+                <button type="submit" class="btn">Iniciar sesión</button>
+                <p>¿No tienes una cuenta? <a href="./register.html">Regístrate aquí</a></p>
             </div>
         </main>
 
         <script src="script.js"></script>
+        <script type="module">
+            // Import the functions you need from the SDKs you need
+            import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+            // TODO: Add SDKs for Firebase products that you want to use
+            // https://firebase.google.com/docs/web/setup#available-libraries
+          
+            // Your web app's Firebase configuration
+            const firebaseConfig = {
+              apiKey: "AIzaSyDvQCDib0kpLSSb-8zkC8bPpZdNzRHqLYY",
+              authDomain: "todolist-b3a95.firebaseapp.com",
+              projectId: "todolist-b3a95",
+              storageBucket: "todolist-b3a95.appspot.com",
+              messagingSenderId: "1087651724866",
+              appId: "1:1087651724866:web:4918f6117e16fa0486f7db"
+            };
+          
+            // Initialize Firebase
+            const app = initializeApp(firebaseConfig);
+        </script>
     </body>
 </html>
