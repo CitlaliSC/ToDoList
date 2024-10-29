@@ -105,6 +105,10 @@ th:nth-child(3) {
     cursor: pointer;
 }
 
+.form-section button:hover {
+    background-color: #024a89;
+}
+
 .form-section p {
     margin-top: 10px;
     font-size: 0.9em;
