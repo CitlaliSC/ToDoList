@@ -3,9 +3,9 @@ import { saveTaskToFirestore, deleteTaskFromFirestore } from "/scripts/load_list
 const tasksArray = localStorage.getItem("tasks") ? JSON.parse(localStorage.getItem("tasks")) : [];
 console.log(tasksArray);
 
-var task = document.getElementById("inpTask");
-var btnAdd = document.getElementById("btnAdd");
-var list = document.getElementById("list");
+const task = document.getElementById("inpTask");
+const btnAdd = document.getElementById("btnAdd");
+const list = document.getElementById("list");
 
 btnAdd.onclick = function() {
     if (task.value === "") {
@@ -24,46 +24,65 @@ function createTask(task) {
     saveTaskToFirestore(taskID, task.value);
     displayTasks();
     task.value = "";
-  }
+}
+
+function clearTaskList() {
+    list.innerHTML = "";
+}
+
+function createIdColumn(index) {
+    const tdId = document.createElement("td");
+    tdId.textContent = index + 1;
+    return tdId;
+}
+
+function createTaskColumn(task) {
+    const tdTask = document.createElement("td");
+    tdTask.textContent = task.text;
+    return tdTask;
+}
+
+function createDeleteButtonColumn() {
+    const tdBtn = document.createElement("td");
+    const btnDelete = document.createElement("button");
+    btnDelete.type = "button";
+    btnDelete.className = "btnDelete";
+    btnDelete.innerHTML = 'Eliminar';
+
+    tdBtn.appendChild(btnDelete);
+    return tdBtn;
+}
+
+function createTaskRow(task, index) {
+    const tr = document.createElement("tr");
+    tr.appendChild(createIdColumn(index));
+    tr.appendChild(createTaskColumn(task));
+    tr.appendChild(createDeleteButtonColumn());
+    return tr;
+}
+
+function resetInput() {
+    task.value = "";
+    task.focus();
+}
 
 function displayTasks() {
-    list.innerHTML = "";
+    clearTaskList();
 
-    // dividir
+    tasksArray.forEach((task, index) => {
+        const taskRow = createTaskRow(task, index);
+        list.appendChild(taskRow);
+    });
 
-    for (let i = 0; i < tasksArray.length; i++) {
-        var tr = document.createElement("tr");
-
-        var tdId = document.createElement("td");
-        tdId.textContent = i + 1;
-        tr.appendChild(tdId);
-
-        var tdTask = document.createElement("td");
-        tdTask.textContent = tasksArray[i].text;
-        tr.appendChild(tdTask);
-    
-        var tdBtn = document.createElement("td");
-        var btnDelete = document.createElement("button");
-        btnDelete.type = "button";
-        btnDelete.className = "btnDelete";
-        btnDelete.innerHTML = 'Eliminar';
-
-        tdBtn.appendChild(btnDelete);
-        tr.appendChild(tdBtn);
-        list.appendChild(tr);
-
-        inpTask.value = "";
-        inpTask.focus();
-    }
-
+    resetInput();
     addingDeleteTask();
 }
 
 function addingDeleteTask() {
-    let btnDelete = document.querySelectorAll(".btnDelete")
+    const btnDelete = document.querySelectorAll(".btnDelete");
     btnDelete.forEach((deleteButton, i) => {
-        deleteButton.addEventListener("click", () => { deleteTask(i) })
-    })
+        deleteButton.addEventListener("click", () => { deleteTask(i) });
+    });
 }
 
 function deleteTask(i) {
@@ -73,7 +92,6 @@ function deleteTask(i) {
     localStorage.setItem("tasks", JSON.stringify(tasksArray));
     deleteTaskFromFirestore(taskID);
 }
-
 
 window.onload = function() {
     displayTasks();
