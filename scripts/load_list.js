@@ -7,33 +7,30 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 const userUID = localStorage.getItem("userUID");
-const tasksArray = localStorage.getItem("tasks") ? JSON.parse(localStorage.getItem("tasks")) : [];
 
 export async function saveTaskToFirestore(taskID, taskText) {
   try {
-    console.log(`Guardando tarea en Firestore con ID: ${taskID}`);
     await setDoc(doc(db, "users", userUID, "tasks", taskID), {
       task: taskText
     });
-    console.log(`Tarea ${taskID} guardada en Firestore`);
   } catch (error) {
-    console.error("Error guardando tarea en Firestore:", error);
+    console.error("Error:", error);
   }
 }
 
 export async function deleteTaskFromFirestore(taskID) {
   try {
-    console.log(`Intentando eliminar documento en Firestore con ID: ${taskID}`);
     const taskRef = doc(db, "users", userUID, "tasks", taskID);
     await deleteDoc(taskRef);
-    console.log("Tarea eliminada de Firestore");
   } catch (error) {
-    console.error("Error eliminando tarea:", error);
+    console.error("Error:", error);
   }
 }
 
 export async function getTasksFromFirestore() {
+  const userUID = localStorage.getItem("userUID");
   const tasksArray = [];
+
   const querySnapshot = await getDocs(collection(db, "users", userUID, "tasks"));
   querySnapshot.forEach((doc) => {
     tasksArray.push({ id: doc.id, ...doc.data() });

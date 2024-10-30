@@ -6,21 +6,18 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
 const btnLogout = document.getElementById('btnLogout');
-const list = document.getElementById("list"); // Asegúrate de tener este elemento en tu HTML
+const list = document.getElementById("list");
 
 btnLogout.addEventListener('click', async function () {
     try {
         await signOut(auth);
         alert("Has cerrado sesión exitosamente.");
         
-        // Limpia el localStorage
-        localStorage.removeItem('userUID'); // Elimina el UID
-        localStorage.removeItem('tasks'); // Elimina la lista de tareas
+        localStorage.removeItem('userUID');
+        localStorage.removeItem('tasks');
 
-        // Limpia el HTML de la lista de tareas
-        list.innerHTML = ""; // Borra todo el contenido del elemento 'list'
-        
-        // Redirige al usuario
+        list.innerHTML = "";
+
         window.location.href = "/html/index.html";
     } catch (error) {
         alert(error.message);
