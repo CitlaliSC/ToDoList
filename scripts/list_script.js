@@ -1,7 +1,6 @@
-// lista de
+import { saveTaskToFirestore, deleteTaskFromFirestore } from "/scripts/load_list.js";
 
 const tasksArray = localStorage.getItem("tasks") ? JSON.parse(localStorage.getItem("tasks")) : [];
-
 console.log(tasksArray);
 
 var task = document.getElementById("inpTask");
@@ -16,13 +15,22 @@ btnAdd.onclick = function() {
     }
 }
 
-function createTask(task) {
-    tasksArray.push(task.value);
+function createTask(task) { 
+    const taskID = `task_${Date.now()}`;
+    const newTask = { id: taskID, text: task.value };
+    
+    tasksArray.push(newTask);
     localStorage.setItem("tasks", JSON.stringify(tasksArray));
-    location.reload();
-}
+    saveTaskToFirestore(taskID, task.value);
+    displayTasks();
+    task.value = "";
+  }
 
 function displayTasks() {
+    list.innerHTML = "";
+
+    // dividir
+
     for (let i = 0; i < tasksArray.length; i++) {
         var tr = document.createElement("tr");
 
@@ -31,13 +39,13 @@ function displayTasks() {
         tr.appendChild(tdId);
 
         var tdTask = document.createElement("td");
-        tdTask.textContent = tasksArray[i];
+        tdTask.textContent = tasksArray[i].text;
         tr.appendChild(tdTask);
     
         var tdBtn = document.createElement("td");
         var btnDelete = document.createElement("button");
         btnDelete.type = "button";
-        btnDelete.className = "btnDelete"
+        btnDelete.className = "btnDelete";
         btnDelete.innerHTML = 'Eliminar';
 
         tdBtn.appendChild(btnDelete);
@@ -59,11 +67,14 @@ function addingDeleteTask() {
 }
 
 function deleteTask(i) {
+    const taskID = tasksArray[i].id;
+    console.log(`Eliminando tarea con ID: ${taskID}`);
     tasksArray.splice(i, 1);
     localStorage.setItem("tasks", JSON.stringify(tasksArray));
-    location.reload();
+    deleteTaskFromFirestore(taskID);
 }
 
-window.onload= function() {
+
+window.onload = function() {
     displayTasks();
 }
