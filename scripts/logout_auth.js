@@ -18,7 +18,7 @@ btnLogout.addEventListener('click', async function () {
 
         list.innerHTML = "";
 
-        window.location.href = "/html/index.html";
+        window.location.href = "../index.html";
     } catch (error) {
         alert(error.message);
     }
