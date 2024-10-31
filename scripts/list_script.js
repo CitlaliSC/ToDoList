@@ -6,6 +6,7 @@ console.log(tasksArray);
 const task = document.getElementById("inpTask");
 const btnAdd = document.getElementById("btnAdd");
 const list = document.getElementById("list");
+let offlineQueue = JSON.parse(localStorage.getItem("offlineQueue")) || [];
 
 btnAdd.onclick = function() {
     if (task.value === "") {
@@ -21,7 +22,7 @@ function createTask(task) {
     
     tasksArray.push(newTask);
     localStorage.setItem("tasks", JSON.stringify(tasksArray));
-    saveTaskToFirestore(taskID, task.value);
+    saveOrQueueTask({ type: "add", task: newTask });
     displayTasks();
     task.value = "";
 }
@@ -87,13 +88,52 @@ function addingDeleteTask() {
 
 async function deleteTask(i) {
     const taskID = tasksArray[i].id;
-    console.log(`Eliminando tarea con ID: ${taskID}`);
     
     tasksArray.splice(i, 1);
     localStorage.setItem("tasks", JSON.stringify(tasksArray));
-    await deleteTaskFromFirestore(taskID);
+    saveOrQueueTask({ type: "delete", taskID });
 
     displayTasks();
+}
+
+function saveOrQueueTask(action) {
+    if (navigator.onLine) {
+        if (action.type === "add") {
+            saveTaskToFirestore(action.task.id, action.task.task);
+        } else if (action.type === "delete") {
+            deleteTaskFromFirestore(action.taskID);
+        }
+    } else {
+        offlineQueue.push(action);
+        localStorage.setItem("offlineQueue", JSON.stringify(offlineQueue));
+    }
+}
+
+window.addEventListener("online", processOfflineQueue);
+window.addEventListener("offline", window.alert("Actualmente sin conexión. Los cambios se guardarán cuando se restablezca la conexión."));
+
+async function processOfflineQueue() {
+    if (offlineQueue.length === 0) return;
+    window.alert("Reconectado. Guardando los cambios pendientes...");
+
+    for (let i = 0; i < offlineQueue.length; i++) {
+        const action = offlineQueue[i];
+        try {
+            if (action.type === "add") {
+                await saveTaskToFirestore(action.task.id, action.task.task);
+            } else if (action.type === "delete") {
+                await deleteTaskFromFirestore(action.taskID);
+            }
+        } catch (error) {
+            console.error(`Error al procesar la acción offline ${action.type}:`, error);
+            window.alert("Ocurrió un error al guardar algunos cambios offline.");
+            return;
+        }
+    }
+
+    offlineQueue = [];
+    localStorage.removeItem("offlineQueue");
+    window.alert("Cambios guardados correctamente.");
 }
 
 window.onload = function() {

@@ -16,7 +16,6 @@ btnLogin.addEventListener("click", async function (event) {
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
     localStorage.setItem('userUID', user.uid);
-    console.log('searching error');
     
     await getTasksFromFirestore();
 
