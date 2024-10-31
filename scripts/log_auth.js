@@ -19,7 +19,7 @@ btnLogin.addEventListener("click", async function (event) {
     
     await getTasksFromFirestore();
 
-    window.location.href = "/html/list.html";
+    window.location.href = "/list.html";
   } catch (error) {
     const errorMessage = error.message;
     alert(errorMessage);
