@@ -17,7 +17,7 @@ btnAdd.onclick = function() {
 
 function createTask(task) { 
     const taskID = `task_${Date.now()}`;
-    const newTask = { id: taskID, text: task.value };
+    const newTask = { id: taskID, task: task.value };
     
     tasksArray.push(newTask);
     localStorage.setItem("tasks", JSON.stringify(tasksArray));
@@ -38,7 +38,7 @@ function createIdColumn(index) {
 
 function createTaskColumn(task) {
     const tdTask = document.createElement("td");
-    tdTask.textContent = task.text;
+    tdTask.textContent = task.task;
     return tdTask;
 }
 
@@ -85,12 +85,15 @@ function addingDeleteTask() {
     });
 }
 
-function deleteTask(i) {
+async function deleteTask(i) {
     const taskID = tasksArray[i].id;
     console.log(`Eliminando tarea con ID: ${taskID}`);
+    
     tasksArray.splice(i, 1);
     localStorage.setItem("tasks", JSON.stringify(tasksArray));
-    deleteTaskFromFirestore(taskID);
+    await deleteTaskFromFirestore(taskID);
+
+    displayTasks();
 }
 
 window.onload = function() {
