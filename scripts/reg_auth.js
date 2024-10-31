@@ -13,19 +13,25 @@ btnRegister.addEventListener("click", async function (event) {
     event.preventDefault();
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
+    const confirmPassword = document.getElementById('confirmPassword').value;
 
+    
     try {
-        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-        const user = userCredential.user;
-
-        await setDoc(doc(db, "users", user.uid), {
-            uid: user.uid,
-            email: user.email,
-            createdAt: new Date()
-        });
-
-        localStorage.setItem('userUID', user.uid);
-        window.location.href = "list.html";
+        if (password === confirmPassword) {
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+            const user = userCredential.user;
+    
+            await setDoc(doc(db, "users", user.uid), {
+                uid: user.uid,
+                email: user.email,
+                createdAt: new Date()
+            });
+    
+            localStorage.setItem('userUID', user.uid);
+            window.location.href = "list.html";
+        } else {
+            window.alert("Las contraseñas no coinciden");
+        }
     } catch (error) {
         alert(error.message);
     }

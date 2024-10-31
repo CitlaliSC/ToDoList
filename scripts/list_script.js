@@ -110,7 +110,6 @@ function saveOrQueueTask(action) {
 }
 
 window.addEventListener("online", processOfflineQueue);
-window.addEventListener("offline", window.alert("Actualmente sin conexión. Los cambios se guardarán cuando se restablezca la conexión."));
 
 async function processOfflineQueue() {
     if (offlineQueue.length === 0) return;
