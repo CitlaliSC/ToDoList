@@ -1,4 +1,4 @@
-import { saveTaskToFirestore, deleteTaskFromFirestore } from "/scripts/load_list.js";
+import { saveTaskToFirestore, deleteTaskFromFirestore } from "./scripts/load_list.js";
 
 const tasksArray = localStorage.getItem("tasks") ? JSON.parse(localStorage.getItem("tasks")) : [];
 console.log(tasksArray);
