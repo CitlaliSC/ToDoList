@@ -113,3 +113,21 @@ th:nth-child(3) {
     margin-top: 10px;
     font-size: 0.9em;
 }
+
+.icons-login img{
+    height: 42px;
+    padding: 6px;
+    border-radius: 8px;
+}
+
+.icons-login {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-bottom: 30px;
+}
+
+.icons-login img:hover {
+    cursor: pointer;
+    background-color: #dddddd;
+}
